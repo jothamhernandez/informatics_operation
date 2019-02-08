@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->enum('role', ['admin','overseer','cluster head','center manager','course consultant','services officers','academic head','business manager']);
             $table->string('password');
             $table->string('api_token');
+            $table->string('employee_uid')->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

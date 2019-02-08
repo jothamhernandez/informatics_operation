@@ -162,7 +162,6 @@ export default {
 
                 if(this.filterOption == 'daily'){
                     this.month_days.forEach((e,i)=>{
-                        // console.log(this.month_days[i].data);
                         dataSet.data.push(this.month_days[i].data);
                     });
                 }

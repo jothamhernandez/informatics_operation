@@ -15,7 +15,6 @@ class CreateCenterEmployeesTable extends Migration
     {
         Schema::create('center_employees', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('employee_uid')->unique();
             $table->integer('center_id')->unsigned();
             $table->integer('employee_id')->unsigned();
             $table->string('position')->nullable();

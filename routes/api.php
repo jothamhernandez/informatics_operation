@@ -25,6 +25,7 @@ Route::group(['middleware'=>['auth:api']], function(){
     Route::apiResource('kpi_month', 'Api\KPIInfoController');
     Route::apiResource('kpi_daily', 'Api\KPIDailyController');
     Route::apiResource('overseer', 'Api\OverseerController');
+    Route::apiResource('client', 'Api\ClientController');
 
 
 

@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-3">
-                <select name="" id="" class="form-control" v-model="center_filter" @change="filter_mode = ''; year_filter = ''">
+                <select name="" id="" class="form-control" v-model="center_filter">
                     <option value="">Center</option>
                     <option :value="center.id" v-for="center in centers" :key="center.id">{{center.center_name}}</option>
                 </select>

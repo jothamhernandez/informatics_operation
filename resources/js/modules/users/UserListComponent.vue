@@ -16,6 +16,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Employee ID</th>
                             <th>E-Mail</th>
                             <th>Role</th>
                             <th>Action</th>
@@ -24,11 +25,13 @@
                     <tbody>
                         <tr v-for="user in userList" :key="user.id">
                             <td>{{user.name}}</td>
+                            <td>{{user.employee_uid}}</td>
                             <td>{{user.email}}</td>
                             <td>{{user.role}}</td>
                             <td>
-                                <button class="btn btn-warning" @click="selectUser(user)">Edit</button>
-                                <button class="btn btn-danger" @click="deleteUser(user)">Delete</button>
+                                <button class="btn btn-warning btn-block" @click="selectUser(user)">Edit</button>
+                                <button class="btn btn-danger btn-block" @click="deleteUser(user)">Delete</button>
+                                <button class="btn btn-success btn-block" @click="resetPassword(user)">Reset Password</button>
                             </td>
                         </tr>
                     </tbody>
@@ -72,6 +75,11 @@ export default {
                 this.users.splice(this.users.indexOf(user), 1);
                 this.$emit('user-delete', user);
             });
+        },
+        resetPassword(user){
+            axios.post('/password/email', {email: user.email, _token: window.axios.defaults.headers.common['X-CSRF-TOKEN']}).then( d=>{
+                console.log(d);
+            })
         }
     }
 }

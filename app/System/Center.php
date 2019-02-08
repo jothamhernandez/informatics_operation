@@ -21,7 +21,7 @@ class Center extends Model
     }
 
     public function employees(){
-        return $this->belongsToMany('App\User', 'center_employees','center_id','employee_id')->withPivot(['employee_uid','position']);
+        return $this->belongsToMany('App\User', 'center_employees','center_id','employee_id');
     }
 
     public function centerKpi(){

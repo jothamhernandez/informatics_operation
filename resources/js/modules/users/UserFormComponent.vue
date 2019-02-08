@@ -12,6 +12,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="Name" class="col-3">Employee ID:</label>
+                            <div class="col-9">
+                                <input type="text" class="form-control" v-model="user.employee_uid">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="email" class="col-3">E-mail:</label>
                             <div class="col-9">
                                 <input type="text" class="form-control" v-model="user.email">

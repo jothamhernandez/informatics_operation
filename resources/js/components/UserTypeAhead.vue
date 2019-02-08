@@ -4,7 +4,6 @@
             <input type="text" class="form-control" v-model="search" placeholder="search user to add" v-if="!selectedUser">
             <div class="userSelected d-flex align-items-center flex-grow-1" v-if="selectedUser">
                 <p class="m-0 p-0 flex-grow-1 w-100">{{selectedUser.name}}</p>
-                <input type="text" class="form-control flex-shrink-1" placeholder="employee_id" v-model="newEmployee.employee_uid">
                 <input type="text" class="form-control flex-shrink-1" placeholder="position" v-model="newEmployee.position">
                 <button class="btn btn-success" @click="assignEmployee">Assign</button>
             </div>

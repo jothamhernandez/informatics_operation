@@ -56,6 +56,12 @@ Vue.component('str-manager', require('./modules/str/STRManagerComponent.vue').de
 // WAP Module
 Vue.component('wap-manager', require('./modules/wap/WAPManagerComponent.vue').default);
 
+// Client Module 
+Vue.component('client-list', require('./modules/clients/ClientListComponent.vue').default);
+Vue.component('client-form', require('./modules/clients/ClientFormComponent.vue').default);
+Vue.component('client-record', require('./modules/clients/ClientRecordComponent.vue').default);
+
+
 // Graph Module
 Vue.component('graph-manager', require('./modules/graphs/GraphManagerComponent.vue').default);
 Vue.component('kpi-graph', require('./modules/graphs/KPIGraphComponent.vue').default);

@@ -5,26 +5,28 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\System\CenterEmployee;
+use App\System\Clients;
 use App\User;
 
-class CenterEmployeeController extends Controller
+
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         //
         if(Auth::user()->role == 'admin'){
-            if($request->input('column') && $request->input('value')){
-                return response()->json(CenterEmployee::where([$request->input('column') => $request->input('value')])->get());
-            } else {
-                return response()->json(CenterEmployee::all());
-            }
-            
+            return response()->json(Clients::all());
+        }
+
+        if(Auth::user()->role == 'course consultant'){
+            $centers = User::with('centerAssignment')->find(Auth::user()->id);
+            $cid = $centers->centerAssignment()->get()->pluck('id');
+            return response()->json(Clients::whereIn('center_id',$cid)->orWhere(['emp_id'=>Auth::user()->id])->get());
         }
     }
 
@@ -37,12 +39,18 @@ class CenterEmployeeController extends Controller
     public function store(Request $request)
     {
         //
-        if(Auth::user()->role == 'admin'){
-            $centerEmployee = $request->all();
-            $employeeRecord = CenterEmployee::create($centerEmployee);
-            $employee = User::find($employeeRecord->employee_id)->toArray();
-            $employee['position'] = $centerEmployee["position"];
-            return response()->json($employee);
+
+        if(Auth::user()->role == 'course consultant'){
+            $client = $request->all();
+            $user = User::with("centerAssignment")->find(Auth::user()->id);
+            $cid = $user->centerAssignment()->get()->pluck('id');
+            $client['center_id'] = $cid[0];
+            $client['emp_id'] = Auth::user()->id;
+
+            $entry = Clients::create($client);
+
+            return response()->json($entry);
+
         }
     }
 
@@ -55,7 +63,6 @@ class CenterEmployeeController extends Controller
     public function show($id)
     {
         //
-        return response()->json(CenterEmployee::find($id));
     }
 
     /**
