@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\System\KPIMonthInfo;
+use App\System\KpiMonthInfo;
 use App\User;
 
 class KPIInfoController extends Controller
@@ -32,12 +32,12 @@ class KPIInfoController extends Controller
             if($request->input('period') && $request->input('center_id')){
                 $date = new \DateTime($request->input('period'));
                 // dd(date_format($date,'Y'));
-               return response()->json(KPIMonthInfo::whereYear('kpi_month', '=', date_format($date, 'Y'))->whereMonth('kpi_month','=',date_format($date, 'm'))->where(['center_id'=>$request->input('center_id')])->first());
+               return response()->json(KpiMonthInfo::whereYear('kpi_month', '=', date_format($date, 'Y'))->whereMonth('kpi_month','=',date_format($date, 'm'))->where(['center_id'=>$request->input('center_id')])->first());
             }
             else if($request->input('column') && $request->input('value')){
-                return response()->json(KPIMonthInfo::where([$request->input('column') => $request->input('value')])->get());
+                return response()->json(KpiMonthInfo::where([$request->input('column') => $request->input('value')])->get());
             } else {
-                return response()->json(KPIMonthInfo::all());
+                return response()->json(KpiMonthInfo::all());
             }
         }
     }
@@ -54,7 +54,7 @@ class KPIInfoController extends Controller
         if(Auth::user()->role == 'admin' || Auth::user()->role == 'center manager'){
             $kpi = $request->all();
             $kpi['manager_id'] = Auth::user()->id;
-            return response()->json(KPIMonthInfo::create($kpi));
+            return response()->json(KpiMonthInfo::create($kpi));
         }
     }
 
@@ -68,7 +68,7 @@ class KPIInfoController extends Controller
     {
         //
         if(Auth::user()->role == 'admin' || Auth::user()->role == 'center manager'){
-            return response()->json(KPIMonthInfo::find($id));
+            return response()->json(KpiMonthInfo::find($id));
         }
         
     }
@@ -85,7 +85,7 @@ class KPIInfoController extends Controller
         //
         if(Auth::user()->role == 'admin' || Auth::user()->role == 'center manager'){
             $data = $request->all;
-            $kpi = KPIMonthInfo::find($id);
+            $kpi = KpiMonthInfo::find($id);
             $kpi->update($data);
             return response()->json($kpi);
         }
@@ -102,7 +102,7 @@ class KPIInfoController extends Controller
     {
         //
         if(Auth::user()->role == 'admin' || Auth::user()->role == 'center manager'){
-            $kpi = KPIMonthInfo::find($id);
+            $kpi = KpiMonthInfo::find($id);
             return response()->json($kpi->delete());
         }
     }
