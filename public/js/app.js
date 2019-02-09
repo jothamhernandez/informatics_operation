@@ -2410,7 +2410,7 @@ __webpack_require__.r(__webpack_exports__);
       this.clients.push(client);
     },
     selectClient: function selectClient(client) {
-      // $('#viewRecord').modal('show');
+      $('#viewRecord').modal('show');
       this.$root.$emit('view-client-record', client);
     }
   }

@@ -63,7 +63,7 @@ export default {
             this.clients.push(client);
         },
         selectClient(client){
-            // $('#viewRecord').modal('show');
+            $('#viewRecord').modal('show');
             this.$root.$emit('view-client-record', client);
         }
     }

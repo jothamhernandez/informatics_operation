@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\System\KPIDailyReport;
+use App\System\KDailyReport;
 use Illuminate\Support\Facades\Auth;
 
 class KPIDailyController extends Controller
@@ -20,7 +20,7 @@ class KPIDailyController extends Controller
         if(Auth::user()->role == 'center manager'){
             if($request->input('period') && $request->input('center_id')){
                 $date = new \DateTime($request->input('period'));
-                return response()->json(KPIDailyReport::whereYear('created_at','=',date_format($date, "Y"))->whereMonth('created_at', '=', date_format($date, 'm'))->where(['center_id'=>$request->input('center_id')])->orderBy('created_at')->get());
+                return response()->json(KpiDailyReport::whereYear('created_at','=',date_format($date, "Y"))->whereMonth('created_at', '=', date_format($date, 'm'))->where(['center_id'=>$request->input('center_id')])->orderBy('created_at')->get());
             }
         }
     }
@@ -38,7 +38,7 @@ class KPIDailyController extends Controller
             $entry = $request->all();
             $entry['prepared_by'] = Auth::user()->id;
             // dd($entry);
-            $kpi_entry = KPIDailyReport::create($entry);
+            $kpi_entry = KpiDailyReport::create($entry);
             
             
             return response()->json($kpi_entry);
