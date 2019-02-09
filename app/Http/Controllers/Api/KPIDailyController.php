@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\System\KDailyReport;
+use App\System\KpiDailyReport;
 use Illuminate\Support\Facades\Auth;
 
 class KPIDailyController extends Controller
