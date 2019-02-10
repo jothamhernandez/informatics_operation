@@ -213,6 +213,7 @@ export default {
                 this.kpi_info = (!isEmpty(r.data) && this.selectedCenter )? r.data : null;
             });
             axios.get(`/api/kpi_daily?period=${this.period}&center_id=${center.id}`).then( r=> {
+                this.selectedCenter = (this.selectedCenter == center) ? null : center
                 this.daily_kpi = (!isEmpty(r.data) && this.selectedCenter )? r.data : null;
             });
         },
