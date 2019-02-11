@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluidjotham">
         <div class="row">
             <div class="col-12">
                 KPI
@@ -201,6 +201,7 @@ export default {
             momentDate: null,
             kpi_fields: [],
             year_filter: '',
+            month_filter: '',
             months: [
                 "January",
                 "February",

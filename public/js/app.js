@@ -3550,6 +3550,7 @@ __webpack_require__.r(__webpack_exports__);
       momentDate: null,
       kpi_fields: [],
       year_filter: '',
+      month_filter: '',
       months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
     };
   },
@@ -77338,7 +77339,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container-fluid" }, [
+  return _c("div", { staticClass: "container-fluidjotham" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
         _vm._v("\n            KPI\n            "),
