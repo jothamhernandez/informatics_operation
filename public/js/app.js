@@ -3047,7 +3047,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    axios.get("http://localhost:8000/api/overseer?query=kpi&center_id=".concat(this.center.id)).then(function (r) {
+    axios.get("/api/overseer?query=kpi&center_id=".concat(this.center.id)).then(function (r) {
       _this.centerData = r.data;
       _this.labelList = _this.labels();
 

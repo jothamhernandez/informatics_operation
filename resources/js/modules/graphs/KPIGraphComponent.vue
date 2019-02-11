@@ -89,7 +89,7 @@ export default {
     props: ['center','filterOption','fields','year_filter','month_filter'],
     mounted(){
 
-        axios.get(`http://localhost:8000/api/overseer?query=kpi&center_id=${this.center.id}`).then( r=> {  
+        axios.get(`/api/overseer?query=kpi&center_id=${this.center.id}`).then( r=> {  
             this.centerData = r.data;
             this.labelList = this.labels();
             if(this.filterOption == 'daily'){
