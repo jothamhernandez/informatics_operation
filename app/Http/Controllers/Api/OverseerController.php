@@ -19,7 +19,7 @@ class OverseerController extends Controller
     public function index(Request $request)
     {
         //
-        if(Auth::user()->role == 'admin' || Auth::user()->role == 'overseer'){
+        if(Auth::user()->role == 'admin' || Auth::user()->role == 'overseer' || Auth::user()->role == 'center manager'){
             if($request->input('query') && $request->input('center_id')){
                 $center = Center::with(['centerKpi','centerKpiTarget'])->find($request->input('center_id'));
                 $center->centerKpi = $center->centerKpi->sortBy('created_at')->groupBy(function($d){

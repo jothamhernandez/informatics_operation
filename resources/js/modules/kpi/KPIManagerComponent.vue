@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 KPI
@@ -8,7 +8,12 @@
                         {{center.center_name}}
                     </button>
                 </div>
-                
+                <div class="row">
+                    <div class="col-4" v-for="kpi in kpi_fields" :key="kpi" v-if="selectedCenter">
+                        <h3 class="text-center">{{ kpi.replace(/_/g, " ").toUpperCase().replace("TARGET","") }}</h3>
+                        <kpi-graph :center="selectedCenter" :filter-option="'daily'" :fields="kpi" :year_filter="year_filter" :month_filter="month_filter"></kpi-graph>
+                    </div>
+                </div>
                 <div>
                     <button class="btn btn-success" v-if="selectedCenter && !kpi_info" data-toggle="modal" data-target="#KPI_target_form">Add</button>
                     <kpi-form :id="'KPI_target_form'" :center="selectedCenter" :period="period" :setting="'target'" v-on:submit-form="displayKPIInfo"></kpi-form>
@@ -193,7 +198,23 @@ export default {
             daily_kpi: null,
             monthBusinessDays:null,
             period: null,
-            momentDate: null
+            momentDate: null,
+            kpi_fields: [],
+            year_filter: '',
+            months: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ]
         }
     },
     mounted(){
@@ -205,17 +226,31 @@ export default {
         });
         this.monthBusinessDays = moment(this.period, 'YYYY-MM-DD').monthBusinessDays();
         this.momentDate = moment(this.period, 'YYYY-MM-DD');
+        this.year_filter = moment(this.period, 'YYYY').format('YYYY');
+        // console.log(new Date().getMonth());
+        
+        axios.get('/api/getColumnName/kpi_month_infos').then( r=> {
+            r.data.forEach((d, index) =>{
+                if(index != 0 && index != 1 && index != 2 && index != 3 && index != 11 && index != 12){
+                    this.kpi_fields.push(d);
+                }
+            });
+        });
+
     },
     methods:{
         getKPIInfo(center){
             axios.get(`/api/kpi_month?period=${this.period}&center_id=${center.id}`).then( r=> {
                 this.selectedCenter = (this.selectedCenter == center) ? null : center
                 this.kpi_info = (!isEmpty(r.data) && this.selectedCenter )? r.data : null;
+                axios.get(`/api/kpi_daily?period=${this.period}&center_id=${center.id}`).then( r=> {
+                   
+                    this.daily_kpi = (!isEmpty(r.data))? r.data : null;
+                    this.month_filter = this.months[new Date().getMonth()];
+                });
+                 
             });
-            axios.get(`/api/kpi_daily?period=${this.period}&center_id=${center.id}`).then( r=> {
-                this.selectedCenter = (this.selectedCenter == center) ? null : center
-                this.daily_kpi = (!isEmpty(r.data))? r.data : null;
-            });
+            
         },
         moment: moment,
         getTotal(properties){

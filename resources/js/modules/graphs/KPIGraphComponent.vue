@@ -60,7 +60,6 @@ export default {
                 this.datasets = []
                 this.datasets.push(this.getDataSet('actual'));
                 this.datasets.push(this.getDataSet('target'));
-                console.log(this.datasets);
             }
         }
     },
@@ -93,6 +92,16 @@ export default {
         axios.get(`http://localhost:8000/api/overseer?query=kpi&center_id=${this.center.id}`).then( r=> {  
             this.centerData = r.data;
             this.labelList = this.labels();
+            if(this.filterOption == 'daily'){
+                var labelList = []
+                this.month_days = moment(`${this.month_filter} 1 ${this.year_filter}`, 'LL').monthNaturalDays();
+                this.month_days.forEach(d => {
+                    labelList.push(d.date());
+                });
+                this.labelList = labelList;
+                
+            }
+            
             this.datasets.push(this.getDataSet('actual'));
             this.datasets.push(this.getDataSet('target'));
         })
@@ -161,8 +170,12 @@ export default {
                 }   
 
                 if(this.filterOption == 'daily'){
+                    var highest = 0;
                     this.month_days.forEach((e,i)=>{
-                        dataSet.data.push(this.month_days[i].data);
+                        if(highest < this.month_days[i].data){
+                            highest = this.month_days[i].data;
+                        }
+                        dataSet.data.push(highest);
                     });
                 }
                 dataSet.label = "Actual";

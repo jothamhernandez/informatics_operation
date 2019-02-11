@@ -66,11 +66,18 @@ Vue.component('client-record', require('./modules/clients/ClientRecordComponent.
 Vue.component('graph-manager', require('./modules/graphs/GraphManagerComponent.vue').default);
 Vue.component('kpi-graph', require('./modules/graphs/KPIGraphComponent.vue').default);
 
+// Forgot Password
+Vue.component('forgot-password', require('./components/ForgotPasswordComponent.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+// Vue.config.devtools = false
+// Vue.config.debug = false
+// Vue.config.silent = true;
 
 const app = new Vue({
     el: '#app'
