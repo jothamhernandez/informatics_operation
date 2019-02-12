@@ -2970,9 +2970,7 @@ __webpack_require__.r(__webpack_exports__);
   computed: {},
   watch: {
     year_filter: {
-      handler: function handler(newval, oldval) {
-        console.log(newval);
-      }
+      handler: function handler(newval, oldval) {}
     },
     labelList: {
       handler: function handler(newval, oldval) {
@@ -3005,7 +3003,23 @@ __webpack_require__.r(__webpack_exports__);
     month_filter: {
       handler: function handler(newval, oldval) {
         var labelList = [];
-        console.log(newval);
+
+        if (this.filterOption == 'daily') {
+          this.month_days = moment("".concat(this.month_filter, " 1 ").concat(this.year_filter), 'LL').monthNaturalDays();
+          this.month_days.forEach(function (d) {
+            labelList.push(d.date());
+          });
+        }
+
+        this.labelList = labelList;
+        this.datasets = [];
+        this.datasets.push(this.getDataSet('actual'));
+        this.datasets.push(this.getDataSet('target'));
+      }
+    },
+    centerData: {
+      handler: function handler(newval, oldval) {
+        var labelList = [];
 
         if (this.filterOption == 'daily') {
           this.month_days = moment("".concat(this.month_filter, " 1 ").concat(this.year_filter), 'LL').monthNaturalDays();
@@ -3078,7 +3092,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       var days = [];
 
-      if (setting == 'actual') {
+      if (setting == 'actual' && this.centerData) {
         for (var year in this.centerData.centerKpi) {
           for (var month in this.centerData.centerKpi[year]) {
             var data = {};
@@ -3107,7 +3121,6 @@ __webpack_require__.r(__webpack_exports__);
                     for (var a in data) {
                       // dataSet.data.push(data[a]);
                       _this2.month_days[index].data = data[a];
-                      console.log(_this2.month_days[index]);
                     }
                   } else {}
                 });
@@ -3143,7 +3156,7 @@ __webpack_require__.r(__webpack_exports__);
         dataSet.borderColor = "#00438D";
       }
 
-      if (setting == 'target') {
+      if (setting == 'target' && this.centerData) {
         for (var year in this.centerData.centerKpiTarget) {
           for (var month in this.centerData.centerKpiTarget[year]) {
             var data = {};

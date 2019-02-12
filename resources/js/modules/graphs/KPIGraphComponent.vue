@@ -10,7 +10,7 @@ export default {
     watch:{
         year_filter: {
             handler: function(newval,oldval){
-                console.log(newval);
+                
             }
         },
         labelList: {
@@ -48,7 +48,24 @@ export default {
         month_filter: {
             handler: function(newval, oldval){
                 var labelList = []
-                console.log(newval);
+    
+                if(this.filterOption == 'daily'){
+                    
+                    this.month_days = moment(`${this.month_filter} 1 ${this.year_filter}`, 'LL').monthNaturalDays();
+                    this.month_days.forEach(d => {
+                        labelList.push(d.date());
+                    });
+                }
+                this.labelList = labelList;
+                this.datasets = []
+                this.datasets.push(this.getDataSet('actual'));
+                this.datasets.push(this.getDataSet('target'));
+            }
+        },
+        centerData: {
+            handler: function(newval, oldval){
+                var labelList = []
+    
                 if(this.filterOption == 'daily'){
                     
                     this.month_days = moment(`${this.month_filter} 1 ${this.year_filter}`, 'LL').monthNaturalDays();
@@ -115,7 +132,7 @@ export default {
                 this.month_days[index].data = 0;
             });
             var days = []
-            if(setting == 'actual'){
+            if(setting == 'actual' && this.centerData){
                 for(var year in this.centerData.centerKpi){
                     for(var month in this.centerData.centerKpi[year]){
                         var data = {};
@@ -144,7 +161,7 @@ export default {
                                         for(var a in data){
                                             // dataSet.data.push(data[a]);
                                             this.month_days[index].data = data[a];
-                                            console.log(this.month_days[index]);
+                                            
                                         } 
                                     } else {
                                         
@@ -182,7 +199,7 @@ export default {
                 dataSet.borderColor= "#00438D"; 
             }
 
-            if(setting == 'target'){
+            if(setting == 'target' && this.centerData){
                 for(var year in this.centerData.centerKpiTarget){
                     for(var month in this.centerData.centerKpiTarget[year]){
                         var data = {};
