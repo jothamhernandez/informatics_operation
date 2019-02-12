@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Auth;
+use App\User;
 
 class Helpers extends Controller
 {
@@ -23,5 +25,8 @@ class Helpers extends Controller
     }
     function getColumnName(Request $request, $table){
         return Schema::getColumnListing($table);
+    }
+    function getUser(){
+        return Auth::user();
     }
 }

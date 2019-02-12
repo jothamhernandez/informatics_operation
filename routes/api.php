@@ -31,4 +31,5 @@ Route::group(['middleware'=>['auth:api']], function(){
 
     Route::get('getEnum/{table}/{field}', "Api\Helpers@getEnum");
     Route::get('getColumnName/{table}', "Api\Helpers@getColumnName");
+    Route::get('loggedUser', 'Api\Helpers@getUser');
 });

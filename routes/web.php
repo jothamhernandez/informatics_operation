@@ -37,5 +37,6 @@ Route::group(['prefix'=>'course_consultant','middleware'=>['auth','rolecheck']],
 Route::get('/sandbox', 'Sandbox@testing');
 
 Auth::routes();
+Route::get('/forgot-password', 'SystemController@forgotPassword')->middleware('auth')->name('forgotpassword');
 
 Route::get('/home', 'HomeController@index')->name('home');

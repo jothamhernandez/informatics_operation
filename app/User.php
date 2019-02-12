@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -65,6 +66,10 @@ class User extends Authenticatable
 
     public function centerAssignment(){
         return $this->belongsToMany('App\System\Center','center_employees','employee_id','center_id');
+    }
+
+    public function sendPasswordResetNotification($token){
+        $this->notify(new ResetPasswordNotification($token));
     }
 
 }

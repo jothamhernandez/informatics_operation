@@ -1789,13 +1789,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      user: null,
+      reset: {
+        email: "",
+        password: "",
+        password_confirmation: "" // token: document.head.querySelector('meta[name="csrf-token"]').content
+
+      }
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/loggedUser').then(function (r) {
+      _this.user = r.data;
+    });
+  },
+  methods: {
+    resetPassword: function resetPassword() {
+      this.reset.email = this.user.email;
+      axios.post('/password/reset', this.reset).then(function (r) {
+        console.log(r);
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -74655,82 +74676,97 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-12" }, [
-          _c("div", { staticClass: "form-group row" }, [
-            _c(
-              "label",
-              {
-                staticClass: "form-label col-3",
-                attrs: { for: "currentPass" }
-              },
-              [_vm._v("Current Password")]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-9" }, [
-              _c("input", {
-                staticClass: "form-control",
-                attrs: { type: "password", placeholder: "Current Password" }
-              })
-            ])
-          ]),
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12" }, [
+        _c("div", { staticClass: "form-group row" }, [
+          _c(
+            "label",
+            { staticClass: "form-label col-3", attrs: { for: "newPassword" } },
+            [_vm._v("New Password")]
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group row" }, [
-            _c(
-              "label",
-              {
-                staticClass: "form-label col-3",
-                attrs: { for: "newPassword" }
-              },
-              [_vm._v("New Password")]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-9" }, [
-              _c("input", {
-                staticClass: "form-control",
-                attrs: { type: "password", placeholder: "New Password" }
-              })
-            ])
-          ]),
+          _c("div", { staticClass: "col-9" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.reset.password,
+                  expression: "reset.password"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "password", placeholder: "New Password" },
+              domProps: { value: _vm.reset.password },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.reset, "password", $event.target.value)
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group row" }, [
+          _c(
+            "label",
+            {
+              staticClass: "form-label col-3",
+              attrs: { for: "retypePassword" }
+            },
+            [_vm._v("Retype Password")]
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group row" }, [
+          _c("div", { staticClass: "col-9" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.reset.password_confirmation,
+                  expression: "reset.password_confirmation"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "password", placeholder: "Retype Password" },
+              domProps: { value: _vm.reset.password_confirmation },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.reset,
+                    "password_confirmation",
+                    $event.target.value
+                  )
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group row" }, [
+          _c("div", { staticClass: "col-12" }, [
             _c(
-              "label",
+              "button",
               {
-                staticClass: "form-label col-3",
-                attrs: { for: "retypePassword" }
+                staticClass: "btn btn-success",
+                on: { click: _vm.resetPassword }
               },
-              [_vm._v("Retype Password")]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-9" }, [
-              _c("input", {
-                staticClass: "form-control",
-                attrs: { type: "password", placeholder: "Retype Password" }
-              })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group row" }, [
-            _c("div", { staticClass: "col-12" }, [
-              _c("button", { staticClass: "btn btn-success" }, [
-                _vm._v("Change Password")
-              ])
-            ])
+              [_vm._v("Change Password")]
+            )
           ])
         ])
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
