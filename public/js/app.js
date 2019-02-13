@@ -2995,21 +2995,27 @@ __webpack_require__.r(__webpack_exports__);
     },
     labelList: {
       handler: function handler(newval, oldval) {
-        this.chartData.labels = newval; // if(!this._data._chart){
+        this.chartData.labels = newval;
 
-        this.renderChart(this.chartData, this.options); // } else {
-        // this._data._chart.update()
-        // }
+        if (!this._data._chart) {
+          this.renderChart(this.chartData, this.options);
+        } else {
+          this._data._chart.update();
+        }
       }
     },
     datasets: {
       handler: function handler(newval, oldval) {
-        this.chartData.datasets = newval; // if(!this._data._chart){
+        this.chartData.datasets = newval;
 
-        this.renderChart(this.chartData, this.options); // } else {
-        // this._data._chart.update()
-        // }
-      }
+        if (!this._data._chart) {
+          this.renderChart(this.chartData, this.options);
+        } else {
+          this._data._chart.update(); // this.renderChart(this.chartData, this.options);
+
+        }
+      } // deep: true
+
     },
     filterOption: {
       handler: function handler(old, newval) {
@@ -3054,6 +3060,31 @@ __webpack_require__.r(__webpack_exports__);
         this.datasets.push(this.getDataSet('actual'));
         this.datasets.push(this.getDataSet('target'));
       }
+    },
+    center: {
+      handler: function handler(newval, oldval) {
+        var _this = this;
+
+        axios.get("/api/overseer?query=kpi&center_id=".concat(this.center.id)).then(function (r) {
+          _this.centerData = r.data;
+          _this.labelList = _this.labels();
+
+          if (_this.filterOption == 'daily') {
+            var labelList = [];
+            _this.month_days = moment("".concat(_this.month_filter, " 1 ").concat(_this.year_filter), 'LL').monthNaturalDays();
+
+            _this.month_days.forEach(function (d) {
+              labelList.push(d.date());
+            });
+
+            _this.labelList = labelList;
+          }
+
+          _this.datasets.push(_this.getDataSet('actual'));
+
+          _this.datasets.push(_this.getDataSet('target'));
+        });
+      }
     }
   },
   data: function data() {
@@ -3080,36 +3111,36 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: ['center', 'filterOption', 'fields', 'year_filter', 'month_filter'],
   mounted: function mounted() {
-    var _this = this;
+    var _this2 = this;
 
     axios.get("/api/overseer?query=kpi&center_id=".concat(this.center.id)).then(function (r) {
-      _this.centerData = r.data;
-      _this.labelList = _this.labels();
+      _this2.centerData = r.data;
+      _this2.labelList = _this2.labels();
 
-      if (_this.filterOption == 'daily') {
+      if (_this2.filterOption == 'daily') {
         var labelList = [];
-        _this.month_days = moment("".concat(_this.month_filter, " 1 ").concat(_this.year_filter), 'LL').monthNaturalDays();
+        _this2.month_days = moment("".concat(_this2.month_filter, " 1 ").concat(_this2.year_filter), 'LL').monthNaturalDays();
 
-        _this.month_days.forEach(function (d) {
+        _this2.month_days.forEach(function (d) {
           labelList.push(d.date());
         });
 
-        _this.labelList = labelList;
+        _this2.labelList = labelList;
       }
 
-      _this.datasets.push(_this.getDataSet('actual'));
+      _this2.datasets.push(_this2.getDataSet('actual'));
 
-      _this.datasets.push(_this.getDataSet('target'));
+      _this2.datasets.push(_this2.getDataSet('target'));
     });
   },
   methods: {
     getDataSet: function getDataSet(setting) {
-      var _this2 = this;
+      var _this3 = this;
 
       var dataSet = {};
       dataSet.data = [];
       this.month_days.forEach(function (e, index) {
-        _this2.month_days[index].data = 0;
+        _this3.month_days[index].data = 0;
       });
       var days = [];
 
@@ -3119,7 +3150,7 @@ __webpack_require__.r(__webpack_exports__);
             var data = {};
             this.centerData.centerKpi[year][month].forEach(function (d) {
               for (var prop in d) {
-                if (prop == _this2.fields.replace('target', 'actual')) {
+                if (prop == _this3.fields.replace('target', 'actual')) {
                   if (!data[prop]) {
                     data[prop] = 0;
                   }
@@ -3134,14 +3165,14 @@ __webpack_require__.r(__webpack_exports__);
               delete data.updated_at;
               delete data.id;
 
-              if (_this2.filterOption == 'daily') {
-                _this2.month_days.forEach(function (e, index) {
+              if (_this3.filterOption == 'daily') {
+                _this3.month_days.forEach(function (e, index) {
                   if (e.format('YYYY-MM-DD') == moment(d.created_at, 'YYYY-MM-DD').format('YYYY-MM-DD')) {
                     delete data.created_at;
 
                     for (var a in data) {
                       // dataSet.data.push(data[a]);
-                      _this2.month_days[index].data = data[a];
+                      _this3.month_days[index].data = data[a];
                     }
                   } else {}
                 });
@@ -3165,8 +3196,8 @@ __webpack_require__.r(__webpack_exports__);
         if (this.filterOption == 'daily') {
           var highest = 0;
           this.month_days.forEach(function (e, i) {
-            if (highest < _this2.month_days[i].data) {
-              highest = _this2.month_days[i].data;
+            if (highest < _this3.month_days[i].data) {
+              highest = _this3.month_days[i].data;
             }
 
             dataSet.data.push(highest);
@@ -3183,7 +3214,7 @@ __webpack_require__.r(__webpack_exports__);
             var data = {};
             this.centerData.centerKpiTarget[year][month].forEach(function (d) {
               for (var prop in d) {
-                if (prop == _this2.fields) {
+                if (prop == _this3.fields) {
                   if (!data[prop]) {
                     data[prop] = 0;
                   }
@@ -3198,8 +3229,8 @@ __webpack_require__.r(__webpack_exports__);
               delete data.updated_at;
               delete data.id;
 
-              if (_this2.filterOption == 'daily') {
-                _this2.month_days.forEach(function (e) {
+              if (_this3.filterOption == 'daily') {
+                _this3.month_days.forEach(function (e) {
                   if (e.format('YYYY-MM') == moment(d.kpi_month, 'YYYY-MM').format('YYYY-MM')) {
                     delete data.created_at;
 
@@ -3208,7 +3239,7 @@ __webpack_require__.r(__webpack_exports__);
                     }
                   } else {
                     if (e.format('YYYY-MM') == moment(d.kpi_month, 'YYYY-MM').format('YYYY-MM')) {
-                      dataSet.data.push(data[_this2.fields]);
+                      dataSet.data.push(data[_this3.fields]);
                     }
                   }
                 });
@@ -77002,12 +77033,14 @@ var render = function() {
                     [
                       _c("h3", { staticClass: "text-center" }, [
                         _vm._v(
-                          _vm._s(
-                            kpi
-                              .replace(/_/g, " ")
-                              .toUpperCase()
-                              .replace("TARGET", "")
-                          )
+                          _vm._s(center.center_name) +
+                            " " +
+                            _vm._s(
+                              kpi
+                                .replace(/_/g, " ")
+                                .toUpperCase()
+                                .replace("TARGET", "")
+                            )
                         )
                       ]),
                       _vm._v(" "),
@@ -77431,12 +77464,15 @@ var render = function() {
                   [
                     _c("h3", { staticClass: "text-center" }, [
                       _vm._v(
-                        _vm._s(
-                          kpi
-                            .replace(/_/g, " ")
-                            .toUpperCase()
-                            .replace("TARGET", "")
-                        )
+                        "(" +
+                          _vm._s(_vm.selectedCenter.center_name.toUpperCase()) +
+                          ") " +
+                          _vm._s(
+                            kpi
+                              .replace(/_/g, " ")
+                              .toUpperCase()
+                              .replace("TARGET", "")
+                          )
                       )
                     ]),
                     _vm._v(" "),

@@ -16,24 +16,26 @@ export default {
         labelList: {
             handler: function(newval, oldval){
                 this.chartData.labels = newval;
-                // if(!this._data._chart){
+                if(!this._data._chart){
                     
                     this.renderChart(this.chartData, this.options);
-                // } else {
-                    // this._data._chart.update()
-                // }
+                } else {
+                    this._data._chart.update()
+                }
             }
         },
         datasets: {
             handler: function(newval, oldval){
                 this.chartData.datasets = newval;
-                // if(!this._data._chart){
                 
-                this.renderChart(this.chartData, this.options);
-                // } else {
-                    // this._data._chart.update()
-                // }
-            }
+                if(!this._data._chart){
+                    this.renderChart(this.chartData, this.options);
+                } else {
+                    this._data._chart.update()
+                    // this.renderChart(this.chartData, this.options);
+                }
+            },
+            // deep: true
         },
         filterOption: {
             handler: function(old, newval){
@@ -77,6 +79,27 @@ export default {
                 this.datasets = []
                 this.datasets.push(this.getDataSet('actual'));
                 this.datasets.push(this.getDataSet('target'));
+            }
+        },
+        center: {
+            handler: function(newval, oldval){
+                
+                axios.get(`/api/overseer?query=kpi&center_id=${this.center.id}`).then( r=> {  
+                    this.centerData = r.data;
+                    this.labelList = this.labels();
+                    if(this.filterOption == 'daily'){
+                        var labelList = []
+                        this.month_days = moment(`${this.month_filter} 1 ${this.year_filter}`, 'LL').monthNaturalDays();
+                        this.month_days.forEach(d => {
+                            labelList.push(d.date());
+                        });
+                        this.labelList = labelList;
+                        
+                    }
+                    
+                    this.datasets.push(this.getDataSet('actual'));
+                    this.datasets.push(this.getDataSet('target'));
+                })
             }
         }
     },

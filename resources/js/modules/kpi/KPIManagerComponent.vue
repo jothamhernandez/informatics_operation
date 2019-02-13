@@ -10,7 +10,7 @@
                 </div>
                 <div class="row">
                     <div class="col-4" v-for="kpi in kpi_fields" :key="kpi" v-if="selectedCenter">
-                        <h3 class="text-center">{{ kpi.replace(/_/g, " ").toUpperCase().replace("TARGET","") }}</h3>
+                        <h3 class="text-center">({{ selectedCenter.center_name.toUpperCase() }}) {{ kpi.replace(/_/g, " ").toUpperCase().replace("TARGET","") }}</h3>
                         <kpi-graph :center="selectedCenter" :filter-option="'daily'" :fields="kpi" :year_filter="year_filter" :month_filter="month_filter"></kpi-graph>
                     </div>
                 </div>
