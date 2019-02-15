@@ -69,6 +69,10 @@ Vue.component('kpi-graph', require('./modules/graphs/KPIGraphComponent.vue').def
 // Forgot Password
 Vue.component('forgot-password', require('./components/ForgotPasswordComponent.vue').default);
 
+// Feedback Component
+Vue.component('feedback', require('./components/FeedbackComponent.vue').default);
+Vue.component('feedback-form', require('./components/FeedbackFormComponent.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

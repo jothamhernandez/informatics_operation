@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\System\KpiMonthInfo;
 use App\User;
+use App\System\Logs;
 
 class KPIInfoController extends Controller
 {
@@ -54,7 +55,11 @@ class KPIInfoController extends Controller
         if(Auth::user()->role == 'admin' || Auth::user()->role == 'center manager'){
             $kpi = $request->all();
             $kpi['manager_id'] = Auth::user()->id;
-            return response()->json(KpiMonthInfo::create($kpi));
+            $entry = KpiMonthInfo::create($kpi);
+            if($entry){
+                Logs::create(['action'=>'added kpi month targets','ip_address'=>$request->server('REMOTE_ADDR'),'user_id'=>Auth::user()->id]);
+            }
+            return response()->json($entry);
         }
     }
 
@@ -86,7 +91,10 @@ class KPIInfoController extends Controller
         if(Auth::user()->role == 'admin' || Auth::user()->role == 'center manager'){
             $data = $request->all;
             $kpi = KpiMonthInfo::find($id);
-            $kpi->update($data);
+            if($kpi->update($data)){
+                Logs::create(['action'=>'updated kpi target per month','ip_address'=>$request->server('REMOTE_ADDR'),'user_id'=>Auth::user()->id]);
+            }
+            
             return response()->json($kpi);
         }
 
@@ -103,7 +111,10 @@ class KPIInfoController extends Controller
         //
         if(Auth::user()->role == 'admin' || Auth::user()->role == 'center manager'){
             $kpi = KpiMonthInfo::find($id);
-            return response()->json($kpi->delete());
+            if($kpi->delete()){
+                Logs::create(['action'=>'deleted kpi configuration','ip_address'=>$request->server('REMOTE_ADDR'),'user_id'=>Auth::user()->id]);
+            }
+            return response()->json();
         }
     }
 }

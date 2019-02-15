@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,7 +12,8 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
+    // dd($request->server('REMOTE_ADDR'));
     return view('welcome');
 });
 

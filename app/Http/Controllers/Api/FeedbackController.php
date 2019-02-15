@@ -4,26 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\System\KpiDailyReport;
 use Illuminate\Support\Facades\Auth;
+use App\System\Feedback;
 use App\System\Logs;
 
-class KPIDailyController extends Controller
+class FeedbackController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         //
-        if(Auth::user()->role == 'center manager'){
-            if($request->input('period') && $request->input('center_id')){
-                $date = new \DateTime($request->input('period'));
-                return response()->json(KpiDailyReport::whereYear('created_at','=',date_format($date, "Y"))->whereMonth('created_at', '=', date_format($date, 'm'))->where(['center_id'=>$request->input('center_id')])->orderBy('created_at')->get());
-            }
-        }
     }
 
     /**
@@ -35,17 +29,16 @@ class KPIDailyController extends Controller
     public function store(Request $request)
     {
         //
-        if(Auth::user()->role == 'center manager'){
-            $entry = $request->all();
-            $entry['prepared_by'] = Auth::user()->id;
-            // dd($entry);
-            $kpi_entry = KpiDailyReport::create($entry);
-            
-            if($kpi_entry){
-                Logs::create(['action'=>'added kpi entry', 'ip_address'=>$request->server('REMOTE_ADDR'), 'user_id'=>Auth::user()->id]);
-            }
-            return response()->json($kpi_entry);
+        $user = Auth::user();
+        $feedback = $request->all();
+        $feedback['user_id'] = $user->id;
+
+        $entry = Feedback::create($feedback);
+
+        if($entry) {
+            Logs::create(['action'=>'add feedback', 'ip_address'=>$request->server('REMOTE_ADDR'), 'user_id'=>$user->id]);
         }
+        return response()->json($entry);
     }
 
     /**

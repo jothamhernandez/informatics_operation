@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\System\Cluster;
+use App\System\Logs;
 
 class ClusterController extends Controller
 {
@@ -33,6 +34,9 @@ class ClusterController extends Controller
         //
         if(Auth::user()->role == 'admin'){
             $cluster = $request->all();
+            if($cluster){
+                Logs::create(['action'=>'added a cluster', 'ip_address' => $request->server('REMOTE_ADDR'), 'user_id'=>Auth::user()->id]);
+            }
             return response()->json(Cluster::create($cluster));
         }
 
@@ -62,7 +66,9 @@ class ClusterController extends Controller
         //
         if(Auth::user()->role == 'admin'){
             $cluster = Cluster::find($id);
-            $cluster->update($request->all());
+            if($cluster->update($request->all())){
+                Logs::create(['action'=>'updated a cluster information', 'ip_address'=>$request->server('REMOTE_ADDR'), 'user_id'=>Auth::user()->id]);
+            }
             return response()->json($cluster);
         }
     }

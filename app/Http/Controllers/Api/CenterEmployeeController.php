@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\System\CenterEmployee;
+use App\System\Logs;
 use App\User;
 
 class CenterEmployeeController extends Controller
@@ -41,6 +42,9 @@ class CenterEmployeeController extends Controller
             $centerEmployee = $request->all();
             $employeeRecord = CenterEmployee::create($centerEmployee);
             $employee = User::find($employeeRecord->employee_id)->toArray();
+            if($employeeRecord){
+                Logs::create(['action'=>'added employee to a center', 'ip_address' => $request->server('REMOTE_ADDR'), 'user_id'=>Auth::user()->id]);
+            }
             $employee['position'] = $centerEmployee["position"];
             return response()->json($employee);
         }

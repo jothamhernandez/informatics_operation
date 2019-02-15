@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\System\Clients;
+use App\System\Logs;
 use App\User;
 
 
@@ -49,6 +50,9 @@ class ClientController extends Controller
 
             $entry = Clients::create($client);
 
+            if($entry){
+                Logs::create(['action'=>'Added a Client on the Record', 'ip_address' => $request->server('REMOTE_ADDR'), 'user_id'=>Auth::user()->id]);
+            }
             return response()->json($entry);
 
         }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\System\Center;
+use App\System\Logs;
 use App\User;
 
 class CenterController extends Controller
@@ -42,6 +43,9 @@ class CenterController extends Controller
     {
         //
         $center = Center::create($request->all());
+        if($center){
+            Logs::create(['action'=>'created a center', 'ip_address' => $request->server('REMOTE_ADDR'), 'user_id'=>Auth::user()->id]);
+        }
         return response()->json($center);
     }
 
@@ -68,7 +72,10 @@ class CenterController extends Controller
     {
         //
         $center = Center::find($id);
-        $center->update($request->all());
+        if($center->update($request->all())){
+            Logs::create(['action'=>'updated a center', 'ip_address' => $request->server('REMOTE_ADDR'), 'user_id'=>Auth::user()->id]);
+        }
+        
         return response()->json($center);
     }
 
@@ -82,7 +89,10 @@ class CenterController extends Controller
     {
         //
         $center =Center::find($id);
-        return response()->json($center->delete());
+        if($status = $center->delete()){
+            Logs::create(['action'=>'deleted a center', 'ip_address' => $request->server('REMOTE_ADDR'), 'user_id'=>Auth::user()->id]);
+        }
+        return response()->json($status);
 
     }
 }
