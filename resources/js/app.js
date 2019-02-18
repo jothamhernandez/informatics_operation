@@ -70,8 +70,12 @@ Vue.component('kpi-graph', require('./modules/graphs/KPIGraphComponent.vue').def
 Vue.component('forgot-password', require('./components/ForgotPasswordComponent.vue').default);
 
 // Feedback Component
-Vue.component('feedback', require('./components/FeedbackComponent.vue').default);
-Vue.component('feedback-form', require('./components/FeedbackFormComponent.vue').default);
+Vue.component('feedback', require('./components/Feedback/FeedbackComponent.vue').default);
+Vue.component('feedback-list', require('./components/Feedback/FeedbackListComponent.vue').default);
+Vue.component('feedback-form', require('./components/Feedback/FeedbackFormComponent.vue').default);
+
+// Navigation
+Vue.component('navigation', require('./components/Navigation/NavigationComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -84,7 +88,25 @@ Vue.component('feedback-form', require('./components/FeedbackFormComponent.vue')
 // Vue.config.silent = true;
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data(){
+        return {
+            selectedComponent: null
+        }
+    },
+    mounted(){
+        this.$root.$on('navigation-click', this.updateDisplay)
+    },
+    methods:{
+        updateDisplay(link){
+            this.selectedComponent = link;
+            console.log(link);
+        },
+        isComponentSelected(link){
+            console.log(link == this.selectedComponent)
+            return (link == this.selectedComponent);
+        }
+    }
 });
 
 

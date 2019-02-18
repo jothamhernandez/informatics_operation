@@ -15,4 +15,8 @@ class AdminController extends Controller
     function center(){
         return view('modules.admin.center');
     }
+    function feedback(Request $request, $id){
+        $feedback = Feedback::find($id);
+        return view('module.admin.feedback');
+    }
 }

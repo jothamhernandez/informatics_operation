@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\System\Feedback;
 use App\System\Logs;
 
+
 class FeedbackController extends Controller
 {
     /**
@@ -18,6 +19,9 @@ class FeedbackController extends Controller
     public function index()
     {
         //
+        if(Auth::user()->role == 'admin'){
+            return response()->json(Feedback::all());
+        }
     }
 
     /**
